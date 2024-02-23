@@ -6,8 +6,6 @@ import re
 
 
 class Framer:
-    # ques: how to get the file size? --> iterate or just start writing / modifying at the same time
-    # ans: lseek
     # note: I'm using a header size of 64 bits to store file / filename size
     def __init__(self, filename: str, archive_fd: int):
         # save archive fd
@@ -21,7 +19,6 @@ class Framer:
 
     def start_frame(self):
         # get the length of filename, format in 64 bits
-        # FIXME: this is getting ascii encoded
         b = binary_format_64(len(self.filename))
 
         # write the filename size and filename
