@@ -149,7 +149,7 @@ class Extractor:
             while True:
                 c = c_next
                 c_next = self.read(1)
-                if c == b"\x00" and c_next == b"\x00":
+                if c == b"\x00" and c_next == b"\x00" and escaped_zero == False:
                     # 0x00 0x00 is an escaped sequence for 0x00
                     escaped_zero = True
                 elif (c == b"\x00" and c_next == b"\x01" and escaped_zero == False) or len(c) == 0:
