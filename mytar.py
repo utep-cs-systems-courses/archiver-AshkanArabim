@@ -58,21 +58,33 @@ class Framer:
             return start_frame
 
     def _define_write_frame(self):
-        # there's no difference in behavior for writing the frame, so just return the func
-        def write_frame():
-            # write the whole file
-            while True:
-                buffer = os.read(self.file_fd, 100)
-                l = len(buffer)
-                if l == 0:
-                    break
+        if self.framer_type == "out":
+            def write_frame():
+                # write the whole file
+                while True:
+                    buffer = os.read(self.file_fd, 100)
+                    l = len(buffer)
+                    if l == 0:
+                        break
 
-                # swap 0x00 with 0x00 0x00
-                buffer = buffer.replace(b"\x00", b"\x00\x00")
+                    os.write(self.archive_fd, buffer)
 
-                os.write(self.archive_fd, buffer)
+            return write_frame
+        else:
+            def write_frame():
+                # write the whole file
+                while True:
+                    buffer = os.read(self.file_fd, 100)
+                    l = len(buffer)
+                    if l == 0:
+                        break
 
-        return write_frame
+                    # swap 0x00 with 0x00 0x00
+                    buffer = buffer.replace(b"\x00", b"\x00\x00")
+
+                    os.write(self.archive_fd, buffer)
+
+            return write_frame
 
     def _define_end_frame(self):
         if self.framer_type == "out":
