@@ -210,7 +210,9 @@ class Extractor:
                         break
 
                     # make directories if they don't exist
-                    os.makedirs("/".join(filename.split("/")[:-1]), exist_ok=True)
+                    dirname = "/".join(filename.split("/")[:-1])
+                    if len(dirname) > 0:
+                        os.makedirs(dirname, exist_ok=True)
 
                     # create files with name
                     file_fd = os.open(filename, os.O_RDWR | os.O_CREAT | os.O_TRUNC)
